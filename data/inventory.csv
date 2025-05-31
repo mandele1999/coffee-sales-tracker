@@ -1,0 +1,4 @@
+Ingredient,Unit,CostPerUnit,Stock
+Coffee,g,0.05,310
+Milk,ml,0.001,3300
+Sugar,g,0.02,770

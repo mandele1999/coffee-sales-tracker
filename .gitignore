@@ -1,0 +1,37 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# VSCode settings
+.vscode/
+
+# macOS / Linux / Windows OS junk
+.DS_Store
+Thumbs.db
+
+# Streamlit cache and logs
+.streamlit/
+*.log
+
+# Data and exports (optional)
+# data/sales_log.csv
+# *.csv
+# *.xlsx
+
+# Python test cache
+.pytest_cache/
+
+# General
+*.bak
+*.swp

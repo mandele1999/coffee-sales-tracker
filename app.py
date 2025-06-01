@@ -1,17 +1,44 @@
+from PIL import Image
 import altair as alt
 import pandas as pd
 import streamlit as st
 from tracker import process_sale, get_daily_summary, load_recipes, get_sales_summary
 from export_utils import export_df_to_csv, export_df_to_excel
 
+# Set up color map for drinks
+coffee_color_map = {
+    "Black Coffee": "#4B3621",
+    "Milk Coffee": "#C8AD7F",
+}
+
+metric_color_map = {
+    "Revenue": "#7090B9",
+    "Cost": "#D9534F",
+    "Profit": "#4FA072"
+}   
+
 
 st.set_page_config(page_title="Coffee Sales Tracker", layout="centered")
 
 st.title("☕ Coffee Vendor Sales Tracker")
 
+# Display logo
+logo = Image.open("assets/expresso.png")
+st.sidebar.image(logo, use_container_width=True)
+
+# Display welcome message
+st.sidebar.markdown(
+    """
+    Welcome to the Coffee Vendor Sales Tracker! ☕
+    
+    This app helps you manage your coffee sales, track daily performance, and analyze historical data.
+    
+    Use the sidebar to navigate through different sections.
+    """
+)
 # Sidebar navigation
 page = st.sidebar.radio("Navigate to", ["Sales Entry", "Daily Summary", "Historical Summary"])
-
+st.sidebar.markdown("**Currently available drinks: Black Coffee, Milk Coffee**")
 recipes = load_recipes()
 
 if page == "Sales Entry":
@@ -27,7 +54,8 @@ if page == "Sales Entry":
     if "reset_fields" not in st.session_state:
         st.session_state.reset_fields = False
 
-    drink_options = ["-- Select a drink --"] + list(recipes.index)
+    available_drinks = ["Black Coffee", "Milk Coffee"]
+    drink_options = ["-- Select a drink --"] + [d for d in available_drinks if d in recipes.index]
 
     # Handle field reset BEFORE widget instantiation
     if st.session_state.reset_fields:
@@ -137,9 +165,12 @@ elif page == "Daily Summary":
                 alt.Chart(drink_counts_df)
                 .mark_bar()
                 .encode(
-                    x=alt.X("Drink", sort="-y"),
+                    x=alt.X("Drink:N", sort="ascending"),
                     y="Quantity",
-                    color=alt.Color("Drink", legend=None),
+                    color=alt.Color("Drink", scale=alt.Scale(
+                        domain=list(coffee_color_map.keys()),
+                        range=list(coffee_color_map.values())
+                    ), legend=None),
                     tooltip=["Drink", "Quantity"]
                 )
                 .properties(height=250)
@@ -156,8 +187,11 @@ elif page == "Daily Summary":
             .mark_arc(innerRadius=50)
             .encode(
                 theta="Revenue",
-                color="Drink",
-                tooltip=["Drink", "Revenue"]
+                color=alt.Color("Drink", scale=alt.Scale(
+                    domain=list(coffee_color_map.keys()),
+                    range=list(coffee_color_map.values())
+                )),
+                tooltip=[alt.Tooltip("Drink:N"), alt.Tooltip("Revenue:Q", format="$,.2f")]
             )
             .properties(width=400, height=300)
         )
@@ -191,7 +225,10 @@ elif page == "Daily Summary":
             .encode(
                 x=alt.X("Date:T", title="Date"),
                 y=alt.Y("Value:Q", title="Amount ($)"),
-                color=alt.Color("Metric:N", title="Metric"),
+                color=alt.Color("Metric:N", scale=alt.Scale(
+                    domain=["Revenue", "Profit"],
+                    range=[metric_color_map["Revenue"], metric_color_map["Profit"]]
+                ), title="Metric"),
                 tooltip=["Date:T", "Metric:N", "Value:Q"]
             )
             .properties(width=700, height=400)
@@ -207,8 +244,10 @@ elif page == "Historical Summary":
     st.header("📅 Historical Sales Summary")
 
     # Load recipes from drink list
-    recipes = load_recipes()
-    drink_options = ['All Drinks'] + list(recipes.index)
+    # recipes = load_recipes()
+
+    available_drinks = ["Black Coffee", "Milk Coffee"]
+    drink_options = ['All Drinks'] + [d for d in available_drinks if d in recipes.index]
 
     # Filters in one row
     col1, col2 = st.columns([3, 3])
@@ -243,7 +282,7 @@ elif page == "Historical Summary":
         # Export buttons
         col_export1, col_export2 = st.columns(2)
         with col_export1:
-            if st.button("Export Breakdown CSv"):
+            if st.button("Export Breakdown CSV"):
                 export_df_to_csv(breakdown_df, f"sales_breakdown_{selected_date}.csv")
                 st.success("CSV Exported!")
 

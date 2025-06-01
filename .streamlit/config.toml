@@ -1,0 +1,12 @@
+[theme]
+primaryColor = "#6F4E37"         # Coffee brown
+backgroundColor = "#F3F0E7"      # Latte foam
+secondaryBackgroundColor = "#E0D6C9"  # Light mocha
+textColor = "#3E2C23"            # Dark espresso
+font = "sans serif"
+
+[server]
+headless = true
+
+[client]
+showSidebarNavigation = false

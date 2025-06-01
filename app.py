@@ -275,7 +275,7 @@ elif page == "Historical Summary":
         col2.metric("🧾 Total Cost", f"${summary['Cost']:.2f}")
         col3.metric("📈 Total Profit", f"${summary['Profit']:.2f}")
 
-        st.markdown("### 🧃Drink Breakdown")
+        st.markdown("### ☕Drink Breakdown")
         if not breakdown_df.empty:
             st.dataframe(breakdown_df, use_container_width=True)
 

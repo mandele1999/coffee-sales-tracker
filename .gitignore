@@ -21,7 +21,7 @@ ENV/
 Thumbs.db
 
 # Streamlit cache and logs
-.streamlit/
+# .streamlit/
 *.log
 
 # Data and exports (optional)

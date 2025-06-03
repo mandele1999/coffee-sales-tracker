@@ -15,4 +15,7 @@ Date,Drink,Quantity,Revenue,Cost,Profit
 2025-06-01,Black Coffee,3,6.0,2.55,3.45
 2025-06-01,Milk Coffee,5,12.5,4.75,7.75
 2025-06-01,Black Coffee,2,4.0,1.7,2.3
-2025-06-01,Milk Coffee,3,7.5,2.8499999999999996,4.65
+2025-06-01,Milk Coffee,3,7.5,2.85,4.65
+2025-06-03,Black Coffee,1,2.0,0.85,1.15
+2025-06-03,Milk Coffee,3,7.5,2.85,4.65
+2025-06-03,Milk Coffee,3,7.5,2.8499999999999996,4.65
